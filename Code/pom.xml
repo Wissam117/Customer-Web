@@ -12,7 +12,7 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.customerweb</groupId>
+	<groupId>com.CustomerWeb</groupId>
 	<artifactId>customer-web-backend</artifactId>
 	<version>1.0.0</version>
 
@@ -71,7 +71,7 @@
 				<version>9.22.3</version>
 				<configuration>
 					<url>jdbc:oracle:thin:@localhost:1521:XE</url>
-					<user>customerweb</user>
+					<user>CustomerWeb</user>
 					<password>password</password>
 					<locations>
 						<location>filesystem:src/main/resources/db/migration</location>
