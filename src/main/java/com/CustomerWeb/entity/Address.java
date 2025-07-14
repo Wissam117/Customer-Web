@@ -1,19 +1,39 @@
 package com.CustomerWeb.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+@Entity
+@Table(name = "addresses")
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
+    @SequenceGenerator(name = "address_seq", sequenceName = "address_seq", allocationSize = 1)
     private Long id;
+    @NotBlank
+    @Column(nullable = false)
     private String street;
+    @NotBlank
+    @Column(nullable = false)
     private String city;
-
+    @NotBlank
+    @Column(nullable = false)
     private String state;
+    @NotBlank
+    @Column(name = "zip_code", nullable = false)
     private String zipCode;
-
+    @NotBlank
+    @Column(nullable = false)
     private String country;
+    @Column(name = "is_default")
     private boolean isDefault;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
+    @OneToMany(mappedBy = "deliveryAddress")
     private List<Order> orders;
+    @OneToMany(mappedBy = "deliveryAddress")
     private List<Shipping> shipments;
 
     public Long getId()

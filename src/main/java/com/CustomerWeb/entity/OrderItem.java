@@ -1,15 +1,37 @@
 package com.CustomerWeb.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
+    @SequenceGenerator(name = "order_item_seq", sequenceName = "order_item_seq", allocationSize = 1)
     private Long id;
+    @NotNull
+    @Min(1)
+    @Column(nullable = false)
     private Integer quantity;
+
+    @NotNull
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @NotNull
+    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public Long getId()

@@ -1,33 +1,59 @@
 package com.CustomerWeb.entity;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
+@Table(name = "customers")
 public class Customer {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
+    @SequenceGenerator(name = "customer_seq", sequenceName = "customer_seq", allocationSize = 1)
     private Long id;
+
+    @NotBlank
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @NotBlank
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Email
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @NotBlank
+    @Column(nullable = false)
     private String password;
+
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    private List<Address> addresses;
-    private List<Order> orders;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Address> addresses;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Order> orders;
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @PrePersist
     protected void onCreate()
     {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
-
+    @PreUpdate
     protected void onUpdate()
     {
         updatedAt = LocalDateTime.now();

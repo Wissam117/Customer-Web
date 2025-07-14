@@ -1,14 +1,22 @@
 package com.CustomerWeb.entity;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+@Entity
+@Table(name = "categories")
 public class Category {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq")
+    @SequenceGenerator(name = "category_seq", sequenceName = "category_seq", allocationSize = 1)
     private Long id;
+    @NotBlank
+    @Column(unique = true, nullable = false)
     private String name;
 
     private String description;
     private boolean active;
-
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     public Long getId()

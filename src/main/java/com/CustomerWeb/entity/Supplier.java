@@ -1,19 +1,32 @@
 package com.CustomerWeb.entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 import java.util.Set;
-public class Supplier {
-    private Long id;
-    private String name;
-    private String email;
 
+@Entity
+@Table(name = "suppliers")
+public class Supplier {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_seq")
+    @SequenceGenerator(name = "supplier_seq", sequenceName = "supplier_seq", allocationSize = 1)
+    private Long id;
+    @NotBlank
+    @Column(nullable = false)
+    private String name;
+    @Email
+    private String email;
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     private String address;
     private boolean active;
-
+    @ManyToMany(mappedBy = "suppliers")
     private Set<Product> products;
-
+    @OneToMany(mappedBy = "supplier")
     private List<Inventory> inventories;
 
     public Long getId()

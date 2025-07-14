@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+public interface InventoryRepository extends JpaRepository<Inventory, Long>
+{
     List<Inventory> findByProductId(Long productId);
     List<Inventory> findBySupplierId(Long supplierId);
     Optional<Inventory> findByProductIdAndSupplierId(Long productId, Long supplierId);

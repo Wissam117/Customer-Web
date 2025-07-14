@@ -1,18 +1,33 @@
 package com.CustomerWeb.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "payments")
 public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_seq")
+    @SequenceGenerator(name = "payment_seq", sequenceName = "payment_seq", allocationSize = 1)
     private Long id;
 
     private BigDecimal amount;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+    @Column(name = "transaction_id")
     private String transactionId;
-
+    @Column(name = "payment_date")
     private LocalDateTime paymentDate;
 
+    @OneToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+    @PrePersist
     protected void onCreate()
     {
         paymentDate = LocalDateTime.now();

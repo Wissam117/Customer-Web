@@ -1,21 +1,33 @@
 package com.CustomerWeb.entity;
+
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "shipping")
 public class Shipping {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipping_seq")
+    @SequenceGenerator(name = "shipping_seq", sequenceName = "shipping_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "tracking_number")
     private String trackingNumber;
 
     private String carrier;
-
+    @Enumerated(EnumType.STRING)
     private ShippingStatus status;
+    @Column(name = "shipped_date")
     private LocalDateTime shippedDate;
-
+    @Column(name = "estimated_delivery_date")
     private LocalDateTime estimatedDeliveryDate;
+    @Column(name = "actual_delivery_date")
     private LocalDateTime actualDeliveryDate;
-
+    @OneToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-
+    @ManyToOne
+    @JoinColumn(name = "delivery_address_id")
     private Address deliveryAddress;
 
     public Long getId() {

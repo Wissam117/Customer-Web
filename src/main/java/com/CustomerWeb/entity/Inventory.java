@@ -1,17 +1,41 @@
 package com.CustomerWeb.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "inventory")
 public class Inventory {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventory_seq")
+    @SequenceGenerator(name = "inventory_seq", sequenceName = "inventory_seq", allocationSize = 1)
     private Long id;
 
+    @NotNull
+    @Min(0)
+    @Column(nullable = false)
     private Integer quantity;
+
+    @Min(0)
+    @Column(name = "reserved_quantity")
     private Integer reservedQuantity;
+
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @PrePersist
+    @PreUpdate
     protected void onUpdate()
     {
         lastUpdated = LocalDateTime.now();

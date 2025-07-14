@@ -1,39 +1,69 @@
 package com.CustomerWeb.entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "products")
 public class Product {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(name = "product_seq", sequenceName = "product_seq", allocationSize = 1)
     private Long id;
+    @NotBlank
+    @Column(nullable = false)
     private String name;
-
+    @Column(length = 2000)
     private String description;
 
+    @NotNull
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
+    @Column(name = "image_url")
     private String imageUrl;
 
     private boolean active;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Inventory> inventories;
 
+    @ManyToMany
+    @JoinTable(
+            name = "product_suppliers",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
     private Set<Supplier> suppliers;
+    @ManyToMany(mappedBy = "products")
     private Set<Cart> carts;
-
+    @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems;
+
+    @PrePersist
     protected void onCreate()
     {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
