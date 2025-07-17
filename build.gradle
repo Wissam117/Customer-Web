@@ -45,11 +45,8 @@ dependencies {
 
 flyway {
 	url = 'jdbc:oracle:thin:@localhost:1521:XE'
-	user = 'CustomerWeb'
+	user = 'SYSTEM'
 	password = 'password'
 	locations = ['filesystem:src/main/resources/db/migration']
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
