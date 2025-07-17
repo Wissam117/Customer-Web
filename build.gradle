@@ -50,3 +50,6 @@ flyway {
 	locations = ['filesystem:src/main/resources/db/migration']
 }
 
+tasks.named('test') {
+	useJUnitPlatform()
+}
